@@ -1,7 +1,8 @@
 'use strict';
 
-import Movie from './movies.model';
+import Movie from './movie.model';
 
+// Send results to response
 function respondWithResult( res, statusCode ) {
   statusCode = statusCode || 200;
   return function( entity ) {
@@ -12,6 +13,7 @@ function respondWithResult( res, statusCode ) {
   };
 }
 
+// Handle the catch in Movie DB query
 function handleError( res, statusCode ) {
   statusCode = statusCode || 500;
   return function( err ) {
