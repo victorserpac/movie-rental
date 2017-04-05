@@ -8,8 +8,9 @@ import express from 'express';
 import http from 'http';
 
 // Setup server
-var app = express();
-var server = http.createServer( app );
+let app = express();
+let server = http.createServer( app );
+require( './config/express' ).default( app );
 
 // Start server
 function startServer() {
