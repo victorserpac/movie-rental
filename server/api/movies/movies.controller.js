@@ -12,3 +12,20 @@ export function index( req, res ) {
       res.status( 500 ).send( err );
     });
 }
+
+// Search Movie by title
+export function searchByTitle( req, res ) {
+  Movie.findAll({
+    where: {
+      title: {
+        $like: '%' + req.params.query + '%'
+      }
+    }
+  })
+  .then( function( movies ) {
+    res.status( 200 ).json( movies );
+  })
+  .catch( function( err ) {
+    res.status( 500 ).send( err );
+  });
+}
