@@ -9,15 +9,20 @@ import http from 'http';
 import db, { Sequelize } from './config/database.js';
 
 // Connect to MySql
-db.sequelize = new Sequelize( 'movierental', 'root', '', {
-  host: 'localhost',
+db.sequelize = new Sequelize( db.database, db.user, db.pass, {
+  host: db.host,
   dialect: 'mysql',
 
   pool: {
     max: 5,
     min: 0,
     idle: 10000
-  }
+  },
+
+  define: {
+    freezeTableName: true,
+    timestamps: false
+  },
 });
 
 // Setup server

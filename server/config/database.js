@@ -2,7 +2,12 @@
 
 import Sequelize from 'sequelize';
 
-let db = {};
+export default {
+  database: 'movierental',
+  user: 'root',
+  pass: '',
+  host: 'localhost',
+  secret: '4allMovie'
+};
 
-export default db;
 export { Sequelize };
