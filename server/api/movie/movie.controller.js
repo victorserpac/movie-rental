@@ -40,3 +40,11 @@ export function searchByTitle( req, res ) {
   .then( respondWithResult( res ) )
   .catch( handleError( res ) );
 }
+
+export function rent( req, res ) {
+  let movie_id = req.body.movie_id;
+
+  console.log(movie_id);
+
+  res.sendStatus( 201 );
+}
