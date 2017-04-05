@@ -1,0 +1,19 @@
+{
+  "name": "movie-rental",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Victor Serpa do Carmo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-2": "^6.22.0"
+  },
+  "scripts": {
+    "start": "./node_modules/babel-cli/bin/babel-node.js index.js"
+  }
+}
