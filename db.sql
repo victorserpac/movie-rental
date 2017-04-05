@@ -62,6 +62,7 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `movierental`.`rent` (
   `user_email` VARCHAR(200) NOT NULL,
   `media_code` INT(11) NOT NULL,
+  `returned` TINYINT(1) NULL,
   PRIMARY KEY (`user_email`, `media_code`),
   INDEX `fk_user_has_media_media1_idx` (`media_code` ASC),
   INDEX `fk_user_has_media_user1_idx` (`user_email` ASC),
@@ -77,6 +78,15 @@ CREATE TABLE IF NOT EXISTS `movierental`.`rent` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `movierental`.`blacklistTokens`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `movierental`.`blacklistTokens` (
+  `token` VARCHAR(500) NOT NULL,
+  PRIMARY KEY (`token`))
+ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
