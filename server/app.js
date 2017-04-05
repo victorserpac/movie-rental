@@ -6,6 +6,19 @@
 
 import express from 'express';
 import http from 'http';
+import db, { Sequelize } from './config/database.js';
+
+// Connect to MySql
+db.sequelize = new Sequelize( 'movierental', 'root', '', {
+  host: 'localhost',
+  dialect: 'mysql',
+
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000
+  }
+});
 
 // Setup server
 let app = express();
