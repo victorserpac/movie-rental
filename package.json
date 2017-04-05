@@ -18,6 +18,8 @@
     "nodemon": "^1.11.0"
   },
   "scripts": {
-    "start": "nodemon index.js --exec ./node_modules/babel-cli/bin/babel-node.js"
+    "start": "nodemon server --exec ./node_modules/babel-cli/bin/babel-node.js",
+    "build": "./node_modules/babel-cli/bin/babel.js server -d dist",
+    "serve": "node dist"
   }
 }
