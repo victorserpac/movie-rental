@@ -7,7 +7,7 @@ Breve documentação da API
 ### Criar usuário
 
 	POST /user
-	
+
 #### Parâmetros
 
 | Nome       | Tipo      | Descrição                            |
@@ -31,7 +31,7 @@ Breve documentação da API
 ### Login de usuário
 
 	GET /user/login
-	
+
 #### Parâmetros
 
 | Nome       | Tipo      | Descrição                            |
@@ -54,7 +54,7 @@ Breve documentação da API
 ### Logout de usuário
 
 	GET /user/logout
-	
+
 #### Parâmetros
 
 Sem parâmetros
@@ -80,16 +80,37 @@ Sem parâmetros
 
 #### Parâmetros
 
+Sem parâmetros
+
 #### Resposta
 
 ##### Sucesso
 
 ```
+HTTP/1.1 200 OK
+[
+  {
+    "id": 1,
+    "title": "Into The Wild",
+    "director": "Sean Penn"
+  },
+  {
+    "id": 2,
+    "title": "The Pursuit Of Happyness",
+    "director": "Gabriele Muccino"
+  },
+  {
+    "id": 3,
+    "title": "The Shawshank Redemption",
+    "director": "Frank Darabont"
+  }
+]
 ```
 
 ##### Erro
 
 ```
+HTTP/1.1 500 Internal Server Error
 ```
 
 ### Locar filme
@@ -160,9 +181,6 @@ Sem parâmetros
 ```
 ```
 
-
-
-
 ## Models
 
 - User
@@ -179,5 +197,3 @@ Sem parâmetros
 - Aluguel
 	- ID do User
 	- ID da Mídia
-
-	
