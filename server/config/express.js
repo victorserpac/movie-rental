@@ -8,6 +8,10 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import passport from 'passport';
 
+require( './passport' ).default( passport );
+
+
+
 export default function( app ) {
 
   // Get our request parameters
