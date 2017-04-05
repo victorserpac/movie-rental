@@ -15,6 +15,7 @@ export function create( req, res ) {
 
 // Authenticate User
 export function login( req, res ) {
+
   User.findOne({
     where: {
       email: req.body.email
@@ -27,7 +28,7 @@ export function login( req, res ) {
     if ( token ) {
       res.json({
         success: true,
-        token: token
+        token: 'JWT ' + token
       });
     } else {
       res.json({

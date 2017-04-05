@@ -33,7 +33,8 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `movierental`.`media` (
   `code` INT(11) NOT NULL,
   `movie_id` INT(11) NOT NULL,
-  PRIMARY KEY (`code`, `movie_id`),
+  `rented` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`code`),
   INDEX `fk_media_movie_idx` (`movie_id` ASC),
   CONSTRAINT `fk_media_movie`
     FOREIGN KEY (`movie_id`)
@@ -62,8 +63,8 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `movierental`.`rent` (
   `user_email` VARCHAR(200) NOT NULL,
   `media_code` INT(11) NOT NULL,
-  `returned` TINYINT(1) NULL,
-  PRIMARY KEY (`user_email`, `media_code`),
+  `id` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
   INDEX `fk_user_has_media_media1_idx` (`media_code` ASC),
   INDEX `fk_user_has_media_user1_idx` (`user_email` ASC),
   CONSTRAINT `fk_user_has_media_user1`
@@ -78,15 +79,6 @@ CREATE TABLE IF NOT EXISTS `movierental`.`rent` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `movierental`.`blacklistTokens`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `movierental`.`blacklistTokens` (
-  `token` VARCHAR(500) NOT NULL,
-  PRIMARY KEY (`token`))
-ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
@@ -110,21 +102,21 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `movierental`;
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0001, 1);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0002, 1);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0003, 1);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0004, 1);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0005, 1);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0006, 2);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0007, 2);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0008, 2);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0009, 2);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0010, 2);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0011, 3);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0012, 3);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0013, 3);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0014, 3);
-INSERT INTO `movierental`.`media` (`code`, `movie_id`) VALUES (0015, 3);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0001, 1, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0002, 1, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0003, 1, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0004, 1, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0005, 1, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0006, 2, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0007, 2, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0008, 2, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0009, 2, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0010, 2, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0011, 3, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0012, 3, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0013, 3, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0014, 3, 0);
+INSERT INTO `movierental`.`media` (`code`, `movie_id`, `rented`) VALUES (0015, 3, 0);
 
 COMMIT;
 
