@@ -1,9 +1,10 @@
 'use strict';
 
+import Movie from './movies.model';
+
 // Gets a list of Movies
 export function index( req, res ) {
-  console.log(req.body);
-
-  res.sendStatus(202);
-
+  Movie.findAll().then( function( movies ) {
+    res.status( 200 ).json( movies );
+  });
 }
