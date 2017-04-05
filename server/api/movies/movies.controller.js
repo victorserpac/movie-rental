@@ -2,30 +2,39 @@
 
 import Movie from './movies.model';
 
+function respondWithResult( res, statusCode ) {
+  statusCode = statusCode || 200;
+  return function( entity ) {
+    if( entity ) {
+      return res.status( statusCode ).json( entity );
+    }
+    return null;
+  };
+}
+
+function handleError( res, statusCode ) {
+  statusCode = statusCode || 500;
+  return function( err ) {
+    res.status( statusCode ).send( err );
+  };
+}
+
 // Gets a list of Movies
 export function index( req, res ) {
-  Movie.findAll()
-    .then( function( movies ) {
-      res.status( 200 ).json( movies );
-    })
-    .catch( function( err ) {
-      res.status( 500 ).send( err );
-    });
+  return Movie.findAll()
+    .then( respondWithResult( res ) )
+    .catch( handleError( res ) );
 }
 
 // Search Movie by title
 export function searchByTitle( req, res ) {
-  Movie.findAll({
+  return Movie.findAll({
     where: {
       title: {
         $like: '%' + req.params.query + '%'
       }
     }
   })
-  .then( function( movies ) {
-    res.status( 200 ).json( movies );
-  })
-  .catch( function( err ) {
-    res.status( 500 ).send( err );
-  });
+  .then( respondWithResult( res ) )
+  .catch( handleError( res ) );
 }
