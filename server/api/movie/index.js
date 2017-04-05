@@ -9,8 +9,7 @@ var router = express.Router();
 
 router.get( '/', controller.index );
 router.post( '/rent', passport.authenticate( 'jwt', { session: false } ), controller.rent );
-
-// router.post('/return', controller.return);
-router.get('/search/:query', controller.searchByTitle);
+router.post( '/giveback', passport.authenticate( 'jwt', { session: false } ), controller.giveback );
+router.get( '/search/:query', controller.searchByTitle );
 
 module.exports = router;

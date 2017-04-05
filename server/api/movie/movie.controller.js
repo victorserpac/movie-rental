@@ -53,7 +53,7 @@ export function rent( req, res ) {
   var decoded = jwt.decode(token, {complete: true});
   var email = decoded.payload.email;
 
-  var media = Media.findOne({
+  Media.findOne({
     where: {
       movie_id: movie_id,
       rented: {
@@ -76,6 +76,24 @@ export function rent( req, res ) {
   .then( () => res.sendStatus( 201 ) )
   .catch( handleError( res ) );
 
+}
+
+export function giveback( req, res ) {
+  var token = getToken(req.headers);
+  let media_code = req.body.media_code;
+
+  Media.findOne({
+    where: {
+      code: media_code
+    }
+  })
+  .then(media => {
+    return media.updateAttributes({
+      rented: false
+    });
+  })
+  .then( () => res.sendStatus( 201 ) )
+  .catch( handleError( res ) );
 }
 
 function getToken (headers) {
