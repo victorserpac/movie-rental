@@ -1,59 +1,68 @@
+/**
+ * User Controller
+ */
+
 'use strict';
 
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import User from './user.model';
 import Token from './token.model';
-import bcrypt from 'bcrypt';
 import db from '../../config/database';
-import jwt from 'jsonwebtoken';
+import { ResponseHelper } from '../../helpers/ResponseHelper';
+import { TokenHelper } from '../../helpers/TokenHelper';
 
-// Create User
-export function create( req, res ) {
-  User.create( req.body )
-    .then( res.sendStatus( 201 ) )
-    .catch( err => res.status( 500 ).json( err ) );
-}
+class UserController {
 
-// Authenticate User
-export function login( req, res ) {
+  // Create User
+  create( req, res ) {
+    User.create( req.body )
+      .then( ResponseHelper.respondWithResult( res ) )
+      .catch( ResponseHelper.handleError( res ) );
+  }
 
-  User.findOne({
-    where: {
-      email: req.body.email
-    }
-  })
-  .then( user => bcrypt.compare( req.body.password, user.password )
-    .then( isMatch => isMatch ? jwt.sign( JSON.stringify( user ), db.secret ) : false )
-  )
-  .then( token => {
+  // Authenticate User
+  login( req, res ) {
+    User.findOne({ where: { email: req.body.email }})
+      .then( user => bcrypt.compare( req.body.password, user.password )
+        .then( isMatch => isMatch ? jwt.sign( JSON.stringify( user ), db.secret ) : false )
+      )
+      .then( token => {
+        if ( token ) {
+          return {
+            success: true,
+            token: 'JWT ' + token
+          }
+        }
+        return {
+          success: false,
+          data: 'Authentication failed. Wrong password.'
+        }
+      })
+      .then( ResponseHelper.respondWithResult( res ) )
+      .catch( ResponseHelper.handleError( res ) );
+  }
+
+  // Logout User | Put token in blacklist
+  logout( req, res ) {
+    let token = TokenHelper.getToken( req.headers );
+
     if ( token ) {
-      res.json({
-        success: true,
-        token: 'JWT ' + token
+      jwt.verify( token, db.secret, function( err ) {
+          if ( err ) {
+            res.sendStatus( 500 );
+          } else {
+            Token.create({ token: token })
+              .then( ResponseHelper.respondWithResult( res ) )
+              .catch( ResponseHelper.handleError( res ) );
+          }
       });
     } else {
-      res.json({
-        success: false,
-        data: 'Authentication failed. Wrong password.'
-      });
+      res.sendStatus( 400 );
     }
-  });
-}
-
-// Logout User | Put token in blacklist
-export function logout( req, res ) {
-  let token = req.headers.authorization || null;
-
-  if ( token ) {
-    jwt.verify( token, db.secret, function( err ) {
-        if ( err ) {
-          res.sendStatus( 500 );
-        } else {
-          Token.create( { token: token } )
-            .then( res.sendStatus( 200 ) )
-            .catch( err => res.status( 500 ).json( err ) );
-        }
-    });
-  } else {
-    res.sendStatus( 400 );
   }
 }
+
+let userController = new UserController();
+
+export default userController;
