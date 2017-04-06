@@ -1,3 +1,7 @@
+/**
+ * Movie Controller
+ */
+
 'use strict';
 
 import Movie from './movie.model';
@@ -6,12 +10,68 @@ import Rent from './rent.model';
 import User from '../user/user.model';
 import jwt from 'jsonwebtoken';
 
+class MovieController {
+
+  // Gets list of Movies
+  index( req, res ) {
+    Movie.findAll()
+      .then( respondWithResult( res ) )
+      .catch( handleError( res ) );
+  }
+
+  // Search Movies by title
+  searchByTitle( req, res ) {
+    Movie.findAll({ where: { title: { $like: '%' + req.params.query + '%' }}})
+      .then( respondWithResult( res ) )
+      .catch( handleError( res ) );
+  }
+
+  // Giveback Movie
+  giveback( req, res ) {
+    let token = getToken( req.headers );
+
+    Media.findOne({ where: { code: req.body.media_code }})
+      .then( media => media.updateAttributes({ rented: false }) )
+      .then( respondWithResult( res ) )
+      .catch( handleError( res ) );
+  }
+
+  // Rent a Movie
+  rent( req, res ) {
+    let token = getToken( req.headers );
+    let decoded = jwt.decode( token, { complete: true });
+
+    Media.findOne({ where: { movie_id: req.body.movie_id, rented: { $ne: true } }})
+      .then( media => {
+        if ( media ) {
+          Rent.create({
+            user_email: decoded.payload.email,
+            media_code: media.dataValues.code
+          });
+
+          return media.updateAttributes({ rented: true });
+        }
+
+        return {
+          success: false,
+          data: 'There is no more DVD for this Movie'
+        }
+      })
+      .then( respondWithResult( res ) )
+      .catch( handleError( res ) );
+  }
+}
+
+let movieController = new MovieController();
+
+export default movieController;
+
 
 // Send results to response
 function respondWithResult( res, statusCode ) {
   statusCode = statusCode || 200;
   return function( entity ) {
-    if( entity ) {
+    if ( entity ) {
       return res.status( statusCode ).json( entity );
     }
     return null;
@@ -24,76 +84,6 @@ function handleError( res, statusCode ) {
   return function( err ) {
     res.status( statusCode ).send( err );
   };
-}
-
-// Gets a list of Movies
-export function index( req, res ) {
-  return Movie.findAll()
-    .then( respondWithResult( res ) )
-    .catch( handleError( res ) );
-}
-
-// Search Movie by title
-export function searchByTitle( req, res ) {
-  return Movie.findAll({
-    where: {
-      title: {
-        $like: '%' + req.params.query + '%'
-      }
-    }
-  })
-  .then( respondWithResult( res ) )
-  .catch( handleError( res ) );
-}
-
-export function rent( req, res ) {
-  var token = getToken(req.headers);
-  let movie_id = req.body.movie_id;
-
-  var decoded = jwt.decode(token, {complete: true});
-  var email = decoded.payload.email;
-
-  Media.findOne({
-    where: {
-      movie_id: movie_id,
-      rented: {
-        $ne: true
-      }
-    }
-  })
-  .then( media => {
-    if ( media ) {
-      Rent.create({
-        user_email: email,
-        media_code: media.dataValues.code
-      });
-
-      return media.updateAttributes({
-        rented: true
-      });
-    }
-  })
-  .then( () => res.sendStatus( 201 ) )
-  .catch( handleError( res ) );
-
-}
-
-export function giveback( req, res ) {
-  var token = getToken(req.headers);
-  let media_code = req.body.media_code;
-
-  Media.findOne({
-    where: {
-      code: media_code
-    }
-  })
-  .then(media => {
-    return media.updateAttributes({
-      rented: false
-    });
-  })
-  .then( () => res.sendStatus( 201 ) )
-  .catch( handleError( res ) );
 }
 
 function getToken (headers) {

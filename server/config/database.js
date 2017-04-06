@@ -1,3 +1,7 @@
+/**
+ * Database configuration
+ */
+
 'use strict';
 
 import Sequelize from 'sequelize';
