@@ -8,7 +8,7 @@ Breve documentação da API
 
 	POST /user
 
-#### Parâmetros
+#### Body
 
 | Nome       | Tipo      | Descrição                            |
 |------------|-----------|--------------------------------------|
