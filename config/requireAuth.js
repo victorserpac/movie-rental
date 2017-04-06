@@ -8,7 +8,10 @@ export default function requireAuth (req, res, next){
       Token.findOne({ where: { token: token }})
         .then( blacklistToken => {
           if ( blacklistToken ) {
-            res.sendStatus( 404 );
+            res.status( 401 ).json({
+              success: false,
+              data: 'Precisa estar logado'
+            });
           } else {
             next();
           }

@@ -1,6 +1,6 @@
 # Especificação do Web Service
 
-Breve documentação da API
+Documentação da API
 
 ## Usuário
 
@@ -20,22 +20,13 @@ Breve documentação da API
 
 ##### Sucesso
 
-Array de filmes
-
 ```
 HTTP/1.1 200 OK
-[
-  {
-    "id": 1,
-    "title": "Into The Wild",
-    "director": "Sean Penn"
-  },
-  {
-    "id": 2,
-    "title": "The Pursuit Of Happyness",
-    "director": "Gabriele Muccino"
-  }
-]
+{
+  "name": "Victor Serpa do Carmo",
+  "email": "victor.serpa.c@icloud.com",
+  "password": "$2a$10$T9fUTylXu7M.P/j9V4ybPuMFz8ISCpm6cQh2mMbqwwPq5wcXpYeDi"
+}
 ```
 
 ##### Erro
@@ -78,8 +69,8 @@ HTTP/1.1 200 OK
 ```
 HTTP/1.1 400 Bad Request
 {
-  success: false,
-  data: 'Falha na autenticação. Email ou senha incorreta.'d
+  "success": false,
+  "data : "Falha na autenticação. Email ou senha incorreta."
 }
 ```
 
@@ -87,22 +78,22 @@ HTTP/1.1 400 Bad Request
 
 	GET /user/logout
 
-#### Parâmetros
+#### Headers
 
-Sem parâmetros
+| Nome          | Tipo      | Descrição                            |
+|---------------|-----------|--------------------------------------|
+| Authorization | String    | JWT Token recebido no login          |
 
 #### Resposta
 
 ##### Sucesso
 
 ```
+HTTP/1.1 200 OK
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVmljdG9yIFNlcnBhIGRvIENhcm1vIiwiZW1haWwiOiJ2aWN0b3Iuc2VycGEuY0BpY2xvdWQuY29tIiwicGFzc3dvcmQiOiIkMmEkMTAka2NGMVl6QkxxMVFObVFrUEQzRXdKdXVVbXNTVmJCNEp1UnB3Sjc3bTlQdEd0VkRBRlIvY2UifQ.QKlCqZzJaexD5RZTKzMpe_R3hEhCxKOJIXaUPBmD1Iw"
+}
 ```
-
-##### Erro
-
-```
-```
-
 
 ## Filme
 
@@ -110,11 +101,9 @@ Sem parâmetros
 
 	GET /movie
 
-#### Parâmetros
-
-Sem parâmetros
-
 #### Resposta
+
+Array de filmes
 
 ##### Sucesso
 
@@ -139,61 +128,97 @@ HTTP/1.1 200 OK
 ]
 ```
 
-##### Erro
-
-```
-HTTP/1.1 500 Internal Server Error
-```
-
 ### Locar filme
 
 	POST /movie/rent
 
-#### Parâmetros
+#### Headers
+
+| Nome          | Tipo      | Descrição                            |
+|---------------|-----------|--------------------------------------|
+| Authorization | String    | JWT Token recebido no login          |
+
+#### Body
 
 | Nome       | Tipo      | Descrição                            |
 |------------|-----------|--------------------------------------|
 | movie_id   | Int       | ID do filme                          |
-| user_id	   | Int       | ID do user                           |
 
 #### Resposta
 
 ##### Sucesso
 
 ```
+HTTP/1.1 200 OK
+{
+  "code": 5,
+  "movie_id": 1,
+  "rented": true
+}
 ```
 
 ##### Erro
 
+Usuário não autenticado
+
 ```
+HTTP/1.1 401 Unauthoried
+{
+	"success": false,
+	"data": "Precisa estar logado"
+}
+```
+
+```
+HTTP/1.1 400 Bad Request
+{
+	"success": false,
+	"data": "Não há mais DVDs disponíveis para este filme"
+}
 ```
 
 ### Devolver filme
 
-	POST /movie/return
+	POST /movie/giveback
 
-#### Parâmetros
+#### Headers
+
+| Nome          | Tipo      | Descrição                            |
+|---------------|-----------|--------------------------------------|
+| Authorization | String    | JWT Token recebido no login          |
+
+#### body
 
 | Nome       | Tipo      | Descrição                            |
 |------------|-----------|--------------------------------------|
-| movie_id   | Int       | ID do filme                          |
-| user_id	   | Int       | ID do user                           |
+| media_code | Int       | ID da mídia dada como "code" na resposta da rota de locação                          |
 
 #### Resposta
 
 ##### Sucesso
 
 ```
+HTTP/1.1 200 OK
+{
+	"code": 2,
+	"movie_id": 1,
+	"rented": false
+}
 ```
 
 ##### Erro
 
 ```
+HTTP/1.1 401 Unauthoried
+{
+	"success": false,
+	"data": "Precisa estar logado"
+}
 ```
 
 ### Pesquisar filme pelo título
 
-	GET /movie/search
+	GET /movie/search/:query
 
 #### Parâmetros
 
@@ -206,26 +231,12 @@ HTTP/1.1 500 Internal Server Error
 ##### Sucesso
 
 ```
+HTTP/1.1 200 OK
+[
+  {
+    "id": 1,
+    "title": "Into The Wild",
+    "director": "Sean Penn"
+  }
+]
 ```
-
-##### Erro
-
-```
-```
-
-## Models
-
-- User
-	- Email
-	- Nome
-	- Senha
-- Movie
-	- ID
-	- Título
-	- Diretor
-- Mídia
-	- Código
-	- ID do Filme
-- Aluguel
-	- ID do User
-	- ID da Mídia

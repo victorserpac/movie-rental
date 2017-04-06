@@ -54,10 +54,10 @@ class MovieController {
           return media.updateAttributes({ rented: true });
         }
 
-        return {
+        res.status( 400 ).json({
           success: false,
-          data: 'There is no more DVD for this Movie'
-        }
+          data: 'Não há mais DVDs disponíveis para este filme'
+        });
       })
       .then( ResponseHelper.respondWithResult( res ) )
       .catch( ResponseHelper.handleError( res ) );
