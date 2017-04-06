@@ -50,7 +50,7 @@ class UserController {
     if ( token ) {
       jwt.verify( token, db.secret, function( err ) {
           if ( err ) {
-            res.sendStatus( 500 );
+            ResponseHelper.respondWithResult( res, 500 );
           } else {
             Token.create({ token: token })
               .then( ResponseHelper.respondWithResult( res ) )
@@ -58,7 +58,7 @@ class UserController {
           }
       });
     } else {
-      res.sendStatus( 400 );
+      ResponseHelper.respondWithResult( res, 400 );
     }
   }
 }

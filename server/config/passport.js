@@ -1,5 +1,6 @@
 import { Strategy as JwtStrategy } from 'passport-jwt';
 import { ExtractJwt } from 'passport-jwt';
+import jwt from 'jsonwebtoken';
 import User from '../api/user/user.model';
 import db from './database';
 
@@ -18,9 +19,7 @@ export default function( passport ) {
         }
         return done( null, user || false );
       })
-      .catch( err => {
-        return done( err );
-      });
+      .catch( err => done( err ) );
   });
 
   passport.use( strategy );

@@ -10,6 +10,7 @@ import Media from '../media/media.model';
 import Rent from './rent.model';
 import User from '../user/user.model';
 import { ResponseHelper } from '../../helpers/ResponseHelper';
+import { TokenHelper } from '../../helpers/TokenHelper';
 
 class MovieController {
 
@@ -29,7 +30,7 @@ class MovieController {
 
   // Giveback Movie
   giveback( req, res ) {
-    let token = getToken( req.headers );
+    let token = TokenHelper.getToken( req.headers );
 
     Media.findOne({ where: { code: req.body.media_code }})
       .then( media => media.updateAttributes({ rented: false }) )
@@ -39,7 +40,7 @@ class MovieController {
 
   // Rent a Movie
   rent( req, res ) {
-    let token = getToken( req.headers );
+    let token = TokenHelper.getToken( req.headers );
     let decoded = jwt.decode( token, { complete: true });
 
     Media.findOne({ where: { movie_id: req.body.movie_id, rented: { $ne: true } }})
