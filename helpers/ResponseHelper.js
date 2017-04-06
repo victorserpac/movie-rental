@@ -12,10 +12,10 @@ export class ResponseHelper {
   }
 
   // Handle Errors in catch promises
-  static handleError( res, statusCode ) {
+  static handleError( res, statusCode, data ) {
     statusCode = statusCode || 500;
     return function( err ) {
-      res.status( statusCode ).send( err );
+      res.status( statusCode ).send( data || err );
     };
   }
 }

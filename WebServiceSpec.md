@@ -16,21 +16,53 @@ Breve documentação da API
 | email	   | String    |  Email do usuário                    |
 | password   | String    |  Senha do usuário                    |
 
-#### Resposta
+#### Respostas
 
 ##### Sucesso
 
+Array de filmes
+
 ```
+HTTP/1.1 200 OK
+[
+  {
+    "id": 1,
+    "title": "Into The Wild",
+    "director": "Sean Penn"
+  },
+  {
+    "id": 2,
+    "title": "The Pursuit Of Happyness",
+    "director": "Gabriele Muccino"
+  }
+]
 ```
 
 ##### Erro
 
+Endereço de email já cadastradado
+
 ```
+HTTP/1.1 409 Conflict
+{
+  "success": false,
+  "data": "Endereço de email já cadastrado"
+}
+```
+
+Erro interno
+
+```
+HTTP/1.1 500 Internal Server Error
+{
+  "success": false,
+  "data": "Erro interno de servidor"
+}
 ```
 
 ### Login de usuário
 
-	GET /user/login
+	POST /user/login
 
 #### Parâmetros
 

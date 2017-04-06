@@ -18,7 +18,19 @@ class UserController {
   create( req, res ) {
     User.create( req.body )
       .then( ResponseHelper.respondWithResult( res ) )
-      .catch( ResponseHelper.handleError( res ) );
+      .catch( err => {
+        if ( err.message == 'Validation error' ) {
+          res.status( 409 ).json({
+            success: false,
+            data: 'Endereço de email já cadastrado'
+          });
+        } else {
+          res.status( 500 ).json({
+            success: false,
+            data: 'Erro interno de servidor'
+          });
+        }
+      });
   }
 
   // Authenticate User
