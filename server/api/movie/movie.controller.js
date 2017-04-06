@@ -4,26 +4,27 @@
 
 'use strict';
 
+import jwt from 'jsonwebtoken';
 import Movie from './movie.model';
-import Media from './media.model';
+import Media from '../media/media.model';
 import Rent from './rent.model';
 import User from '../user/user.model';
-import jwt from 'jsonwebtoken';
+import { ResponseHelper } from '../../helpers/ResponseHelper';
 
 class MovieController {
 
   // Gets list of Movies
   index( req, res ) {
     Movie.findAll()
-      .then( respondWithResult( res ) )
-      .catch( handleError( res ) );
+      .then( ResponseHelper.respondWithResult( res ) )
+      .catch( ResponseHelper.handleError( res ) );
   }
 
   // Search Movies by title
   searchByTitle( req, res ) {
     Movie.findAll({ where: { title: { $like: '%' + req.params.query + '%' }}})
-      .then( respondWithResult( res ) )
-      .catch( handleError( res ) );
+      .then( ResponseHelper.respondWithResult( res ) )
+      .catch( ResponseHelper.handleError( res ) );
   }
 
   // Giveback Movie
@@ -32,8 +33,8 @@ class MovieController {
 
     Media.findOne({ where: { code: req.body.media_code }})
       .then( media => media.updateAttributes({ rented: false }) )
-      .then( respondWithResult( res ) )
-      .catch( handleError( res ) );
+      .then( ResponseHelper.respondWithResult( res ) )
+      .catch( ResponseHelper.handleError( res ) );
   }
 
   // Rent a Movie
@@ -57,34 +58,14 @@ class MovieController {
           data: 'There is no more DVD for this Movie'
         }
       })
-      .then( respondWithResult( res ) )
-      .catch( handleError( res ) );
+      .then( ResponseHelper.respondWithResult( res ) )
+      .catch( ResponseHelper.handleError( res ) );
   }
 }
 
 let movieController = new MovieController();
 
 export default movieController;
-
-
-// Send results to response
-function respondWithResult( res, statusCode ) {
-  statusCode = statusCode || 200;
-  return function( entity ) {
-    if ( entity ) {
-      return res.status( statusCode ).json( entity );
-    }
-    return null;
-  };
-}
-
-// Handle the catch in Movie DB query
-function handleError( res, statusCode ) {
-  statusCode = statusCode || 500;
-  return function( err ) {
-    res.status( statusCode ).send( err );
-  };
-}
 
 function getToken (headers) {
   if (headers && headers.authorization) {

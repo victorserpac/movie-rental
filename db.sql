@@ -81,6 +81,15 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
+-- -----------------------------------------------------
+-- Table `movierental`.`blacklistTokens`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `movierental`.`blacklistTokens` (
+  `token` VARCHAR(400) NOT NULL,
+  PRIMARY KEY (`token`))
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

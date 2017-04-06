@@ -2,11 +2,11 @@
 
 import db, { Sequelize } from '../../config/database';
 
-let tokenSchema = db.sequelize.define( 'blacklistTokens', {
+let Token = db.sequelize.define( 'blacklistTokens', {
   token: {
     type: Sequelize.STRING,
     primaryKey: true
   }
 });
 
-export default tokenSchema;
+export default Token;
