@@ -29,6 +29,13 @@ class UserController {
       )
       .then( token => {
         if ( token ) {
+          Token.findOne({ where: { token: token }})
+            .then( blacklistToken => {
+              if ( blacklistToken ) {
+                blacklistToken.destroy();
+              }
+            });
+
           return {
             success: true,
             token: 'JWT ' + token
