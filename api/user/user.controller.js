@@ -36,9 +36,17 @@ class UserController {
   // Authenticate User
   login( req, res ) {
     User.findOne({ where: { email: req.body.email }})
-      .then( user => bcrypt.compare( req.body.password, user.password )
-        .then( isMatch => isMatch ? jwt.sign( JSON.stringify( user ), db.secret ) : false )
-      )
+      .then( user => {
+        if ( user ) {
+          return bcrypt.compare( req.body.password, user.password )
+           .then( isMatch => isMatch ? jwt.sign( JSON.stringify( user ), db.secret ) : false )
+        } else {
+          res.status( 400 ).json({
+            success: false,
+            data: 'Falha na autenticação. Email ou senha incorreta.'
+          });
+        }
+      })
       .then( token => {
         if ( token ) {
           Token.findOne({ where: { token: token }})
@@ -53,10 +61,11 @@ class UserController {
             token: 'JWT ' + token
           }
         }
-        return {
+
+        res.status( 400 ).json({
           success: false,
-          data: 'Authentication failed. Wrong password.'
-        }
+          data: 'Falha na autenticação. Email ou senha incorreta.'
+        });
       })
       .then( ResponseHelper.respondWithResult( res ) )
       .catch( ResponseHelper.handleError( res ) );

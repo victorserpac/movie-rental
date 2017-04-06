@@ -50,21 +50,11 @@ HTTP/1.1 409 Conflict
 }
 ```
 
-Erro interno
-
-```
-HTTP/1.1 500 Internal Server Error
-{
-  "success": false,
-  "data": "Erro interno de servidor"
-}
-```
-
 ### Login de usuário
 
 	POST /user/login
 
-#### Parâmetros
+#### Body
 
 | Nome       | Tipo      | Descrição                            |
 |------------|-----------|--------------------------------------|
@@ -76,11 +66,21 @@ HTTP/1.1 500 Internal Server Error
 ##### Sucesso
 
 ```
+HTTP/1.1 200 OK
+{
+  "success": true,
+  "token": "JWT eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVmljdG9yIFNlcnBhIGRvIENhcm1vIiwiZW1haWwiOiJ2aWN0b3Iuc2VycGEuY0BpY2xvdWQuY29tIiwicGFzc3dvcmQiOiIkMmEkMTAkMTRjSURkclREaFBXcVhLNnlRUFBpdUVnL1VyMFJCSTFvZ29GY0RGZi5nMld4SFBJT1hibUMifQ.p_-k3iJs-TCh7emZVU9ypF1UVW4xbKaBJr-TYZDnqMI"
+}
 ```
 
 ##### Erro
 
 ```
+HTTP/1.1 400 Bad Request
+{
+  success: false,
+  data: 'Falha na autenticação. Email ou senha incorreta.'d
+}
 ```
 
 ### Logout de usuário
